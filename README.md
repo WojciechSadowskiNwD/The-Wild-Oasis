@@ -1,0 +1,1 @@
+Here, I am learning how to create a dashboard. I will be using Styled Components for CSS for the first time. I have decided to include several new solutions that I am currently learning in the project. These will be React Query, Super Base, React Hot Toast, React Icons, Recharts (charts), and date-fins.
