@@ -31,5 +31,5 @@ function AppLayout() {
 
 export default AppLayout;
 
-
-// Replaced background-colors layout. Expanded navigation inside MainNav (added NavLinks and react-icons).
+  
+//.
