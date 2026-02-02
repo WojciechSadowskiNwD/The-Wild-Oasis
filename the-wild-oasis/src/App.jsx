@@ -71,5 +71,5 @@ function App() {
 
 export default App;
 
-// Zainstalowano
+// 
 
