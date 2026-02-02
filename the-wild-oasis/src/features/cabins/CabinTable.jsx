@@ -40,7 +40,7 @@ function CabinTable() {
 
 	if (isLoading) return <Spinner />;
   
-  console.log(cabins);
+//   console.log(cabins);
   console.log(error);
 
 	return (
