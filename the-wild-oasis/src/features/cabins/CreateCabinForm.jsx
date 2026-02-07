@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { useForm } from "react-hook-form";
 import { createEditCabin } from "../../services/apiCabins";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -12,6 +13,7 @@ import FormRow from "../../ui/FormRow";
 
 function CreateCabinForm({ cabinToEdit = {} }) {
 	const { id: editId, ...editValues } = cabinToEdit;
+	// console.log("cabinToEdit id: " + editId); //undefined if create cabin
 	const isEditSession = Boolean(editId);
 
 	const { register, handleSubmit, reset, getValues, formState } = useForm({
@@ -31,6 +33,7 @@ function CreateCabinForm({ cabinToEdit = {} }) {
 		onError: (err) => toast.error(err.message),
 	});
 
+	// dopytam AI o to czemy mutationFn tym  razem przyjmuje wyodrębnione dane w nawiasie z argumentami w arr-fn.
 	const { mutate: editCabin, isPending: isEditing } = useMutation({
 		mutationFn: ({ newCabinData, id }) => createEditCabin(newCabinData, id),
 		onSuccess: () => {
@@ -44,12 +47,12 @@ function CreateCabinForm({ cabinToEdit = {} }) {
 	const isWorking = isPending || isEditing;
 
 	function onSubmit(data) {
+		// console.log(data);
 		const image = typeof data.image === "string" ? data.image : data.image[0];
 
 		if (isEditSession) {
 			editCabin({newCabinData: {...data, image}, id: editId});
 		} else {
-			// const image = data.image[0];
 			createCabin({ ...data, image });
 		}
 	}

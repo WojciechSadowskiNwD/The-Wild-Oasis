@@ -23,25 +23,28 @@ export async function deleteCabin(id) {
 
 export async function createEditCabin(newCabin, id) {
 	const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-	const hasImagePath = newCabin.image?.startsWith?(supabase);
-	// console.log("hasImagePath: ");
-	// console.log(hasImagePath);
 	
+	const hasImagePath =
+		typeof newCabin.image === "string" && newCabin.image.startsWith(supabaseUrl);
+
 	const imageName = `${Math.random()}-${newCabin.image.name}`.replaceAll(
 		"/",
 		"",
 	);
-	const imagePath = `${supabaseUrl}/storage/v1/object/public/cabin-images/${imageName}`;
+	const imagePath = hasImagePath
+		? newCabin.image
+		: `${supabaseUrl}/storage/v1/object/public/cabin-images/${imageName}`;
 
 	// 1. Create/edit cabin
 	let query = supabase.from("cabins");
 
 	// CREATE
-	if (!id) query.insert([{ ...newCabin, image: imagePath }]);
+	if (!id) query = query.insert([{ ...newCabin, image: imagePath }]);
 
 	// EDIT
-	if (id) query.update({ ...newCabin, image: imagePath }).eq('id', id);
+	if (id) query = query.update({ ...newCabin, image: imagePath }).eq("id", id);
 
+	// I expect one specific record
 	const { data, error } = await query.select().single();
 
 	if (error) {
