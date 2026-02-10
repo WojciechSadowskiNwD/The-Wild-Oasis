@@ -3,17 +3,16 @@ import { useForm } from "react-hook-form";
 import { createEditCabin } from "../../services/apiCabins";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
-
 import Input from "../../ui/Input";
 import Form from "../../ui/Form";
 import Button from "../../ui/Button";
 import FileInput from "../../ui/FileInput";
 import Textarea from "../../ui/Textarea";
 import FormRow from "../../ui/FormRow";
+import { useCreateCabin } from "./useCreateCabin";
 
 function CreateCabinForm({ cabinToEdit = {} }) {
 	const { id: editId, ...editValues } = cabinToEdit;
-	// console.log("cabinToEdit id: " + editId); //undefined if create cabin
 	const isEditSession = Boolean(editId);
 
 	const { register, handleSubmit, reset, getValues, formState } = useForm({
@@ -21,19 +20,9 @@ function CreateCabinForm({ cabinToEdit = {} }) {
 	});
 	const { errors } = formState;
 
+	const { isCreating, createCabin } = useCreateCabin();
 	const queryClient = useQueryClient();
 
-	const { mutate: createCabin, isPending } = useMutation({
-		mutationFn: (newCabin) => createEditCabin(newCabin),
-		onSuccess: () => {
-			toast.success("New cabin succesfully created");
-			queryClient.invalidateQueries({ queryKey: ["cabins"] });
-			reset();
-		},
-		onError: (err) => toast.error(err.message),
-	});
-
-	// dopytam AI o to czemy mutationFn tym  razem przyjmuje wyodrębnione dane w nawiasie z argumentami w arr-fn.
 	const { mutate: editCabin, isPending: isEditing } = useMutation({
 		mutationFn: ({ newCabinData, id }) => createEditCabin(newCabinData, id),
 		onSuccess: () => {
@@ -44,16 +33,16 @@ function CreateCabinForm({ cabinToEdit = {} }) {
 		onError: (err) => toast.error(err.message),
 	});
 
-	const isWorking = isPending || isEditing;
+	const isWorking = isCreating || isEditing;
 
 	function onSubmit(data) {
 		// console.log(data);
 		const image = typeof data.image === "string" ? data.image : data.image[0];
 
 		if (isEditSession) {
-			editCabin({newCabinData: {...data, image}, id: editId});
+			editCabin({ newCabinData: { ...data, image }, id: editId });
 		} else {
-			createCabin({ ...data, image });
+			createCabin({ ...data, image }, { onSuccess: (data) => reset() });
 		}
 	}
 
