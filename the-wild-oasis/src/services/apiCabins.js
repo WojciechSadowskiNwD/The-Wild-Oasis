@@ -18,7 +18,7 @@ export async function deleteCabin(id) {
 		console.error(error);
 		throw new Error("Cabins could not be deleted");
 	}
-	return data;
+	return data; 
 }
 
 export async function createEditCabin(newCabin, id) {
