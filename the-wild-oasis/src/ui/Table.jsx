@@ -13,7 +13,7 @@ const StyledTable = styled.div`
 // weź z props tylko wartość columns, a common row to z ang wspólny wiersz
 const CommonRow = styled.div`
   display: grid;
-  grid-template-columns: ${(props) => props.columns};
+  grid-template-columns: ${(props) => props.$columns};
   column-gap: 2.4rem;
   align-items: center;
   transition: none;
@@ -73,13 +73,13 @@ function Table({columns, children}) {
 
 function Header({children}){
   const {columns} = useContext(TableContext);
-  return <StyledHeader role="row" columns={columns} as="header">
+  return <StyledHeader role="row" $columns={columns} as="header">
     {children}
   </StyledHeader>
 }
 function Row({children}){
   const {columns}= useContext(TableContext);
-  return <StyledRow role="row" columns={columns}>
+  return <StyledRow role="row" $columns={columns}>
     {children}
   </StyledRow>
 }
