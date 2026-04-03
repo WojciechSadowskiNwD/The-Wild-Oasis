@@ -37,6 +37,8 @@ const FilterButton = styled.button`
 
 function Filter({ filterField, options }) {
 	const [searchParams, setSearchParams] = useSearchParams();
+	const currentFilter = searchParams.get(filterField) ||  options.at(0).value;
+
 
 	function handleClick(value) {
 		//te otrzymane do funkcji wartości chcę przekazać do adresu url
@@ -51,6 +53,7 @@ function Filter({ filterField, options }) {
 				<FilterButton
 					key={option.value}
 					onClick={() => handleClick(option.value)}
+					active={option.value === currentFilter}
 				>
 					{option.label}
 				</FilterButton>
