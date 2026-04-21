@@ -1,5 +1,6 @@
 import { HiChevronLeft, HiChevronRight } from "react-icons/hi2";
 import { useSearchParams } from "react-router-dom";
+import { PAGE_SIZE } from "../utils/constans";
 import styled from "styled-components";
 
 const StyledPagination = styled.div`
@@ -58,7 +59,7 @@ const PaginationButton = styled.button`
 	}
 `;
 
-const PAGE_SIZE = 10;
+
 
 function Pagination({ count }) {
 	// Bierzącą stronę chcemy pobrać bezpośrednio z URL-a
@@ -67,6 +68,10 @@ function Pagination({ count }) {
 		? 1
 		: Number(searchParams.get("page"));
 
+	// PAGE_SIZE zawiera liczbę 10
+	// count to ilość wierszy jakie dostalismy wynikiem zapytania do bazy danych
+	// .ceil zakorąglij w górę do liczby całkowitej
+	// ...czyli efakt to 49/10
 	const pageCount = Math.ceil(count / PAGE_SIZE);
 
 	function nextPage() {
