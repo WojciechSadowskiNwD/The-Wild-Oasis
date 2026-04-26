@@ -37,13 +37,15 @@ const FilterButton = styled.button`
 
 function Filter({ filterField, options }) {
 	const [searchParams, setSearchParams] = useSearchParams();
-	const currentFilter = searchParams.get(filterField) ||  options.at(0).value;
-
+	const currentFilter = searchParams.get(filterField) || options.at(0).value;
 
 	function handleClick(value) {
 		//te otrzymane do funkcji wartości chcę przekazać do adresu url
 		// searchParams.set("discount", value);
 		searchParams.set(filterField, value);
+		//jeżeli nagle wybieramy któryś filtr, ustaw od razu stronę 1 aby unikąć krytycznego błędu 
+		if (searchParams.get("page")) searchParams.set("page", 1);
+
 		setSearchParams(searchParams);
 	}
 
